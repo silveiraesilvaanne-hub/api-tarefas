@@ -1,0 +1,67 @@
+{
+  "info": {
+    "_postman_id": "3da9085c-cff1-4273-9656-4554f70bb52a",
+    "name": "API Tarefas",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56885514",
+    "_collection_link": "https://go.postman.co/collection/56885514-3da9085c-cff1-4273-9656-4554f70bb52a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Criar tarefa",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Listar tarefas",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar tarefa por ID",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Atualizar tarefa",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Deletar tarefa",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Filtrar concluídas",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "Filtrar pendentes",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
