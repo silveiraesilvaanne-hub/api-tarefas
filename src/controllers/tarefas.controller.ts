@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { TarefaService } from '../services/tarefas.service';
 
-function criar(req: Request, res: Response): void {
+async function criar(req: Request, res: Response): Promise<void> {
   const { title } = req.body;
 
   if (!title) {
@@ -9,25 +9,27 @@ function criar(req: Request, res: Response): void {
     return;
   }
 
-  const novaTarefa = TarefaService.criar(title);
+  const novaTarefa = await TarefaService.criar(title);
   res.status(201).json(novaTarefa);
 }
 
-function listarTodas(req: Request, res: Response): void {
+async function listarTodas(req: Request, res: Response): Promise<void> {
   const { completed } = req.query;
 
   if (completed === undefined) {
-    res.status(200).json(TarefaService.listarTodas());
+    const tarefas = await TarefaService.listarTodas();
+    res.status(200).json(tarefas);
     return;
   }
 
   const completedBoolean = completed === 'true';
-  res.status(200).json(TarefaService.listarTodas(completedBoolean));
+  const tarefas = await TarefaService.listarTodas(completedBoolean);
+  res.status(200).json(tarefas);
 }
 
-function buscarPorId(req: Request, res: Response): void {
-  const id = req.params.id as string;
-  const tarefa = TarefaService.buscarPorId(id);
+async function buscarPorId(req: Request, res: Response): Promise<void> {
+  const id = Number(req.params.id);
+  const tarefa = await TarefaService.buscarPorId(id);
 
   if (!tarefa) {
     res.status(404).json({ error: 'Tarefa não encontrada.' });
@@ -37,11 +39,11 @@ function buscarPorId(req: Request, res: Response): void {
   res.status(200).json(tarefa);
 }
 
-function atualizar(req: Request, res: Response): void {
-  const id = req.params.id as string;
+async function atualizar(req: Request, res: Response): Promise<void> {
+  const id = Number(req.params.id);
   const { title, completed } = req.body;
 
-  const tarefaAtualizada = TarefaService.atualizar(id, { title, completed });
+  const tarefaAtualizada = await TarefaService.atualizar(id, { title, completed });
 
   if (!tarefaAtualizada) {
     res.status(404).json({ error: 'Tarefa não encontrada.' });
@@ -51,9 +53,9 @@ function atualizar(req: Request, res: Response): void {
   res.status(200).json(tarefaAtualizada);
 }
 
-function deletar(req: Request, res: Response): void {
-  const id = req.params.id as string;
-  const sucesso = TarefaService.deletar(id);
+async function deletar(req: Request, res: Response): Promise<void> {
+  const id = Number(req.params.id);
+  const sucesso = await TarefaService.deletar(id);
 
   if (!sucesso) {
     res.status(404).json({ error: 'Tarefa não encontrada.' });

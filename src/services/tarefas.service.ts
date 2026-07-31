@@ -1,63 +1,58 @@
-interface Tarefa {
-  id: string;
-  title: string;
-  completed: boolean;
-}
+import prisma from '../config/prismaClient';
 
-const tarefas: Tarefa[] = [];
+async function criar(title: string) {
+  const novaTarefa = await prisma.task.create({
+    data: { title },
+  });
 
-function criar(title: string): Tarefa {
-  const novaTarefa: Tarefa = {
-    id: Math.random().toString(36).substring(2, 10),
-    title,
-    completed: false,
-  };
-
-  tarefas.push(novaTarefa);
   return novaTarefa;
 }
 
-function listarTodas(completed?: boolean): Tarefa[] {
+async function listarTodas(completed?: boolean) {
   if (completed === undefined) {
-    return tarefas;
+    return prisma.task.findMany();
   }
 
-  return tarefas.filter((tarefa) => tarefa.completed === completed);
+  return prisma.task.findMany({
+    where: { completed },
+  });
 }
 
-function buscarPorId(id: string): Tarefa | undefined {
-  return tarefas.find((tarefa) => tarefa.id === id);
+async function buscarPorId(id: number) {
+  return prisma.task.findUnique({
+    where: { id },
+  });
 }
 
-function atualizar(
-  id: string,
+async function atualizar(
+  id: number,
   dados: { title?: string; completed?: boolean }
-): Tarefa | undefined {
-  const tarefa = buscarPorId(id);
+) {
+  const tarefaExistente = await buscarPorId(id);
 
-  if (!tarefa) {
+  if (!tarefaExistente) {
     return undefined;
   }
 
-  if (dados.title !== undefined) {
-    tarefa.title = dados.title;
-  }
+  const tarefaAtualizada = await prisma.task.update({
+    where: { id },
+    data: dados,
+  });
 
-  if (dados.completed !== undefined) {
-    tarefa.completed = dados.completed;
-  }
-
-  return tarefa;
+  return tarefaAtualizada;
 }
 
-function deletar(id: string): boolean {
-  const index = tarefas.findIndex((tarefa) => tarefa.id === id);
+async function deletar(id: number): Promise<boolean> {
+  const tarefaExistente = await buscarPorId(id);
 
-  if (index === -1) {
+  if (!tarefaExistente) {
     return false;
   }
 
-  tarefas.splice(index, 1);
+  await prisma.task.delete({
+    where: { id },
+  });
+
   return true;
 }
 
